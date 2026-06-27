@@ -6,25 +6,22 @@
     <title>خزمەتگوزاری کوردستان</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        :root { --primary: #4361ee; --secondary: #3f37c9; --bg: #f8f9fa; --text: #2b2d42; }
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: var(--bg); margin: 0; padding: 15px; color: var(--text); }
-        .header { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; padding: 30px 20px; border-radius: 0 0 30px 30px; margin: -15px -15px 25px -15px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .section { display: none; animation: fadeIn 0.3s ease; }
-        .active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        :root { --primary: #4361ee; --bg: #f8f9fa; --text: #2b2d42; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 15px; color: var(--text); }
+        .header { background: linear-gradient(135deg, var(--primary), #3f37c9); color: white; padding: 25px; border-radius: 0 0 25px 25px; margin: -15px -15px 20px -15px; text-align: center; }
+        .section { display: none; } .active { display: block; }
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .card { background: white; padding: 25px 10px; border-radius: 20px; text-align: center; cursor: pointer; border: 1px solid #eee; transition: 0.3s; }
-        .card:hover { transform: translateY(-5px); border-color: var(--primary); }
-        .card i { font-size: 40px; display: block; margin-bottom: 10px; }
-        .btn-back { background: #eee; border: none; padding: 10px 15px; border-radius: 12px; margin-bottom: 15px; cursor: pointer; font-weight: bold; }
-        input, select, textarea { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 12px; font-family: inherit; }
-        .btn-submit { background: #27ae60; color: white; border: none; padding: 15px; width: 100%; border-radius: 15px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; }
-        .profile-card { background: white; border-radius: 25px; padding: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); text-align: right; }
-        .info-row { margin-bottom: 10px; font-size: 14px; display: flex; align-items: center; gap: 8px; }
-        .info-row i { color: var(--primary); font-style: normal; font-weight: bold; }
+        .card { background: white; padding: 20px; border-radius: 18px; text-align: center; cursor: pointer; border: 1px solid #eee; transition: 0.2s; }
+        .card:hover { transform: scale(1.02); }
+        .btn-back { background: #ddd; border: none; padding: 10px 18px; border-radius: 12px; margin-bottom: 15px; cursor: pointer; font-weight: bold; }
+        input, select, textarea { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 12px; }
+        .btn-submit { background: #27ae60; color: white; border: none; padding: 15px; width: 100%; border-radius: 15px; font-weight: bold; }
+        .no-data { padding: 40px; text-align: center; color: #999; }
     </style>
 </head>
 <body>
+
+    <!-- سەرەکی -->
     <div id="main-menu" class="section active">
         <div class="header"><h1>خزمەتگوزاری کوردستان</h1><p>خزمەتگوزاریی مەبەست هەڵبژێرە</p></div>
         <div class="grid">
@@ -35,6 +32,7 @@
         </div>
     </div>
 
+    <!-- پزیشک -->
     <div id="doctor-types" class="section">
         <button class="btn-back" onclick="showSection('main-menu')">↩ گەڕانەوە</button>
         <div class="header"><h2>پسپۆڕییە پزیشکییەکان</h2></div>
@@ -44,6 +42,7 @@
         </div>
     </div>
 
+    <!-- پیشەوەر -->
     <div id="worker-types" class="section">
         <button class="btn-back" onclick="showSection('main-menu')">↩ گەڕانەوە</button>
         <div class="header"><h2>خزمەتگوزاری پیشەوەران</h2></div>
@@ -53,6 +52,17 @@
         </div>
     </div>
 
+    <!-- بازاڕ -->
+    <div id="shop-types" class="section">
+        <button class="btn-back" onclick="showSection('main-menu')">↩ گەڕانەوە</button>
+        <div class="header"><h2>بازاڕ و دوکانەکان</h2></div>
+        <div class="grid">
+            <div class="card" onclick="showSection('city-select', 'market')"><i>🍏</i><h2>سەوزەفرۆش</h2></div>
+            <div class="card" onclick="showSection('city-select', 'clothing')"><i>👕</i><h2>جلوبەرگ</h2></div>
+        </div>
+    </div>
+
+    <!-- شار -->
     <div id="city-select" class="section">
         <button class="btn-back" onclick="goBackFromCity()">↩ گەڕانەوە</button>
         <div class="header"><h2>شارەکەت هەڵبژێرە</h2></div>
@@ -63,29 +73,24 @@
         </div>
     </div>
 
+    <!-- ئەنجام -->
     <div id="results" class="section">
         <button class="btn-back" onclick="showSection('city-select')">↩ گەڕانەوە</button>
-        <div class="profile-card">
-            <div style="text-align:center;"><div style="font-size:50px;">👤</div><h3>د. ئاراس ئەحمەد</h3></div>
-            <div class="info-row"><i>•</i> <b>پسپۆڕی:</b> پزیشکی ددان</div>
-            <div class="info-row"><i>•</i> <b>ئەزموون:</b> ١٢ ساڵ</div>
-            <div class="info-row"><i>•</i> <b>ناونیشان:</b> هەڵەبجە - شەقامی گشتی</div>
-            <a href="tel:07501234567" class="btn-submit" style="text-decoration:none; display:block; text-align:center;">📞 پەیوەندی بکە</a>
+        <div class="no-data">
+            <i>🔍</i>
+            <p>لەم قۆناغەدا هیچ داتایەک نییە. زانیارییە نوێیەکان بەم زووانە لێرە دەردەکەون.</p>
         </div>
     </div>
 
+    <!-- تۆمارکردن -->
     <div id="register-form" class="section">
         <button class="btn-back" onclick="showSection('main-menu')">↩ گەڕانەوە</button>
         <div class="header"><h2>تۆمارکردنی پیشە</h2></div>
         <input type="text" id="name" placeholder="ناوی تەواو">
-        <select id="cat">
-            <option value="doctor">پزیشک</option>
-            <option value="worker">پیشەوەر</option>
-        </select>
-        <input type="number" id="exp" placeholder="ساڵانی ئەزموون">
-        <textarea id="addr" placeholder="ناونیشان و شوێنەکانی کار"></textarea>
         <input type="tel" id="phone" placeholder="ژمارەی مۆبایل">
-        <button class="btn-submit" onclick="sendDataToBot()">تۆمارکردن و ناردن</button>
+        <input type="number" id="exp" placeholder="ساڵانی ئەزموون">
+        <textarea id="addr" placeholder="ناونیشانی ورد و شوێنەکانی کار"></textarea>
+        <button class="btn-submit" onclick="sendData()">تۆمارکردن و ناردن</button>
     </div>
 
     <script>
@@ -101,10 +106,11 @@
 
         function goBackFromCity() {
             if(['dentist', 'eye'].includes(lastCat)) showSection('doctor-types');
-            else showSection('worker-types');
+            else if(['plumber', 'electrician'].includes(lastCat)) showSection('worker-types');
+            else showSection('shop-types');
         }
 
-        function sendDataToBot() {
+        function sendData() {
             const data = {
                 name: document.getElementById('name').value,
                 phone: document.getElementById('phone').value,
@@ -112,8 +118,7 @@
                 exp: document.getElementById('exp').value
             };
             if(!data.name || !data.phone) return alert("تکایە ناو و مۆبایل پڕ بکەرەوە");
-            tg.sendData(JSON.stringify(data));
-            tg.close();
+            tg.sendData(JSON.stringify(data)); // ئەمە ئێستا کار دەکات
         }
     </script>
 </body>
