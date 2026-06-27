@@ -4,75 +4,117 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>خزمەتگوزاری کوردستان</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f7f6;
-            margin: 0;
-            padding: 20px;
-            text-align: center;
-        }
-        .header {
-            background-color: #2c3e50;
-            color: white;
-            padding: 20px;
-            border-radius: 15px;
-            margin-bottom: 20px;
-        }
-        .card-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-        .card {
-            background: white;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        .card:hover {
-            transform: translateY(-5px);
-        }
-        .card i {
-            font-size: 30px;
-            display: block;
-            margin-bottom: 10px;
-        }
-        h2 { font-size: 18px; margin: 0; color: #333; }
-        p { font-size: 12px; color: #777; }
+        :root { --primary: #4361ee; --secondary: #3f37c9; --bg: #f8f9fa; --text: #2b2d42; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: var(--bg); margin: 0; padding: 15px; color: var(--text); }
+        .header { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; padding: 30px 20px; border-radius: 0 0 30px 30px; margin: -15px -15px 25px -15px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .section { display: none; animation: fadeIn 0.3s ease; }
+        .active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .card { background: white; padding: 25px 10px; border-radius: 20px; text-align: center; cursor: pointer; border: 1px solid #eee; transition: 0.3s; }
+        .card:hover { transform: translateY(-5px); border-color: var(--primary); }
+        .card i { font-size: 40px; display: block; margin-bottom: 10px; }
+        .btn-back { background: #eee; border: none; padding: 10px 15px; border-radius: 12px; margin-bottom: 15px; cursor: pointer; font-weight: bold; }
+        input, select, textarea { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 12px; font-family: inherit; }
+        .btn-submit { background: #27ae60; color: white; border: none; padding: 15px; width: 100%; border-radius: 15px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .profile-card { background: white; border-radius: 25px; padding: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); text-align: right; }
+        .info-row { margin-bottom: 10px; font-size: 14px; display: flex; align-items: center; gap: 8px; }
+        .info-row i { color: var(--primary); font-style: normal; font-weight: bold; }
     </style>
 </head>
 <body>
-
-    <div class="header">
-        <h1>خزمەتگوزاری کوردستان</h1>
-        <p>هەموو پسپۆڕان لە یەک شوێندا</p>
-    </div>
-
-    <div class="card-container">
-        <div class="card">
-            <i>🦷</i>
-            <h2>پزیشکی ددان</h2>
-            <p>دۆزینەوەی کلینیک</p>
-        </div>
-        <div class="card">
-            <i>🛠️</i>
-            <h2>وەستای بۆڕی</h2>
-            <p>خزمەتگوزاری ماڵان</p>
-        </div>
-        <div class="card">
-            <i>⚡</i>
-            <h2>کارەباچی</h2>
-            <p>چاککردنەوەی کارەبا</p>
-        </div>
-        <div class="card">
-            <i>🥗</i>
-            <h2>سەوزەفرۆش</h2>
-            <p>کاڵای تازە و ڕۆژانە</p>
+    <div id="main-menu" class="section active">
+        <div class="header"><h1>خزمەتگوزاری کوردستان</h1><p>خزمەتگوزاریی مەبەست هەڵبژێرە</p></div>
+        <div class="grid">
+            <div class="card" onclick="showSection('doctor-types')"><i>🩺</i><h2>پزیشکەکان</h2></div>
+            <div class="card" onclick="showSection('worker-types')"><i>🛠️</i><h2>پیشەوەران</h2></div>
+            <div class="card" onclick="showSection('shop-types')"><i>🛒</i><h2>بازاڕ و دوکان</h2></div>
+            <div class="card" onclick="showSection('register-form')"><i>✍️</i><h2>تۆمارکردنی کار</h2></div>
         </div>
     </div>
 
+    <div id="doctor-types" class="section">
+        <button class="btn-back" onclick="showSection('main-menu')">↩ گەڕانەوە</button>
+        <div class="header"><h2>پسپۆڕییە پزیشکییەکان</h2></div>
+        <div class="grid">
+            <div class="card" onclick="showSection('city-select', 'dentist')"><i>🦷</i><h2>پزیشکی ددان</h2></div>
+            <div class="card" onclick="showSection('city-select', 'eye')"><i>👁️</i><h2>پزیشکی چاو</h2></div>
+        </div>
+    </div>
+
+    <div id="worker-types" class="section">
+        <button class="btn-back" onclick="showSection('main-menu')">↩ گەڕانەوە</button>
+        <div class="header"><h2>خزمەتگوزاری پیشەوەران</h2></div>
+        <div class="grid">
+            <div class="card" onclick="showSection('city-select', 'plumber')"><i>🚰</i><h2>وەستای بۆری</h2></div>
+            <div class="card" onclick="showSection('city-select', 'electrician')"><i>⚡</i><h2>کارەباچی</h2></div>
+        </div>
+    </div>
+
+    <div id="city-select" class="section">
+        <button class="btn-back" onclick="goBackFromCity()">↩ گەڕانەوە</button>
+        <div class="header"><h2>شارەکەت هەڵبژێرە</h2></div>
+        <div class="grid">
+            <div class="card" onclick="showSection('results')"><i>📍</i><h2>هەولێر</h2></div>
+            <div class="card" onclick="showSection('results')"><i>📍</i><h2>سلێمانی</h2></div>
+            <div class="card" onclick="showSection('results')"><i>📍</i><h2>هەڵەبجە</h2></div>
+        </div>
+    </div>
+
+    <div id="results" class="section">
+        <button class="btn-back" onclick="showSection('city-select')">↩ گەڕانەوە</button>
+        <div class="profile-card">
+            <div style="text-align:center;"><div style="font-size:50px;">👤</div><h3>د. ئاراس ئەحمەد</h3></div>
+            <div class="info-row"><i>•</i> <b>پسپۆڕی:</b> پزیشکی ددان</div>
+            <div class="info-row"><i>•</i> <b>ئەزموون:</b> ١٢ ساڵ</div>
+            <div class="info-row"><i>•</i> <b>ناونیشان:</b> هەڵەبجە - شەقامی گشتی</div>
+            <a href="tel:07501234567" class="btn-submit" style="text-decoration:none; display:block; text-align:center;">📞 پەیوەندی بکە</a>
+        </div>
+    </div>
+
+    <div id="register-form" class="section">
+        <button class="btn-back" onclick="showSection('main-menu')">↩ گەڕانەوە</button>
+        <div class="header"><h2>تۆمارکردنی پیشە</h2></div>
+        <input type="text" id="name" placeholder="ناوی تەواو">
+        <select id="cat">
+            <option value="doctor">پزیشک</option>
+            <option value="worker">پیشەوەر</option>
+        </select>
+        <input type="number" id="exp" placeholder="ساڵانی ئەزموون">
+        <textarea id="addr" placeholder="ناونیشان و شوێنەکانی کار"></textarea>
+        <input type="tel" id="phone" placeholder="ژمارەی مۆبایل">
+        <button class="btn-submit" onclick="sendDataToBot()">تۆمارکردن و ناردن</button>
+    </div>
+
+    <script>
+        let tg = window.Telegram.WebApp;
+        let lastCat = '';
+        tg.expand();
+
+        function showSection(id, cat = '') {
+            if(cat) lastCat = cat;
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+        }
+
+        function goBackFromCity() {
+            if(['dentist', 'eye'].includes(lastCat)) showSection('doctor-types');
+            else showSection('worker-types');
+        }
+
+        function sendDataToBot() {
+            const data = {
+                name: document.getElementById('name').value,
+                phone: document.getElementById('phone').value,
+                addr: document.getElementById('addr').value,
+                exp: document.getElementById('exp').value
+            };
+            if(!data.name || !data.phone) return alert("تکایە ناو و مۆبایل پڕ بکەرەوە");
+            tg.sendData(JSON.stringify(data));
+            tg.close();
+        }
+    </script>
 </body>
 </html>
