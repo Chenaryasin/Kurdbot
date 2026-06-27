@@ -2,124 +2,240 @@
 <html lang="ku" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>خزمەتگوزاری کوردستان</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Kurd Service Premium</title>
+    <!-- فۆنتی فەرمی و مۆدێرن -->
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;500;700&display=swap" rel="stylesheet">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        :root { --primary: #4361ee; --bg: #f8f9fa; --text: #2b2d42; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 15px; color: var(--text); }
-        .header { background: linear-gradient(135deg, var(--primary), #3f37c9); color: white; padding: 25px; border-radius: 0 0 25px 25px; margin: -15px -15px 20px -15px; text-align: center; }
-        .section { display: none; } .active { display: block; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .card { background: white; padding: 20px; border-radius: 18px; text-align: center; cursor: pointer; border: 1px solid #eee; transition: 0.2s; }
-        .card:hover { transform: scale(1.02); }
-        .btn-back { background: #ddd; border: none; padding: 10px 18px; border-radius: 12px; margin-bottom: 15px; cursor: pointer; font-weight: bold; }
-        input, select, textarea { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 12px; }
-        .btn-submit { background: #27ae60; color: white; border: none; padding: 15px; width: 100%; border-radius: 15px; font-weight: bold; }
-        .no-data { padding: 40px; text-align: center; color: #999; }
+        :root {
+            --primary: #4361ee;
+            --bg: #fdfdfe;
+            --card-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            --text-dark: #1a1b25;
+            --text-gray: #7e8299;
+        }
+
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background-color: var(--bg);
+            margin: 0; padding: 0;
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+
+        /* Header وەک وێنەکان */
+        .welcome-section {
+            padding: 30px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .user-greet h1 { margin: 0; font-size: 22px; font-weight: 700; }
+        .user-greet p { margin: 5px 0 0; color: var(--text-gray); font-size: 13px; }
+        .profile-img-top { width: 45px; height: 45px; border-radius: 14px; background: #eee; }
+
+        /* گەڕان (Search Bar) */
+        .search-container { padding: 0 20px 20px; }
+        .search-box {
+            background: #f5f7fa;
+            border-radius: 18px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            color: var(--text-gray);
+        }
+
+        .container { padding: 0 20px 100px 20px; }
+
+        .section { display: none; animation: fadeIn 0.5s ease; }
+        .active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* کارتەکان ڕێک وەک دیزاینە نوێیەکە */
+        .category-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
+        .cat-card {
+            background: white;
+            border-radius: 28px;
+            padding: 25px 15px;
+            text-align: center;
+            box-shadow: var(--card-shadow);
+            border: 1px solid rgba(0,0,0,0.01);
+            transition: 0.3s;
+        }
+        .cat-card:active { transform: scale(0.95); }
+        .cat-card i { font-size: 40px; display: block; margin-bottom: 15px; }
+        .cat-card h2 { font-size: 15px; margin: 0; }
+
+        /* پڕۆفایلی دکتۆرەکان بە شێوازی لیستی */
+        .doctor-item {
+            background: white;
+            border-radius: 24px;
+            padding: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            box-shadow: var(--card-shadow);
+        }
+        .doc-avatar { width: 70px; height: 70px; border-radius: 20px; background: #eef2ff; margin-left: 15px; display:flex; align-items:center; justify-content:center; font-size:30px; }
+        .doc-info h3 { margin: 0; font-size: 15px; }
+        .doc-info p { margin: 5px 0; font-size: 12px; color: var(--text-gray); }
+        .rating { color: #ffc107; font-size: 12px; font-weight: bold; }
+
+        /* دوگمەی گەڕانەوە */
+        .back-btn { background: none; border: none; color: var(--primary); font-weight: bold; padding: 10px 0; cursor: pointer; }
+
+        /* Bottom Nav */
+        .bottom-nav {
+            position: fixed; bottom: 0; width: 100%;
+            background: white; padding: 20px 0;
+            display: flex; justify-content: space-around;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.03);
+            border-radius: 30px 30px 0 0;
+        }
+        .nav-item { font-size: 20px; color: var(--text-gray); cursor: pointer; }
+        .nav-item.active-nav { color: var(--primary); }
+
+        /* پڕۆفایلی وردەکاری (ڕێک وەک وێنەکان) */
+        .detail-card { text-align: center; margin-top: 20px; }
+        .detail-img { width: 120px; height: 120px; border-radius: 35px; background: #eef2ff; margin: 0 auto 20px; font-size: 60px; display: flex; align-items: center; justify-content: center; }
+        .stats-row { display: flex; justify-content: space-around; margin: 25px 0; }
+        .stat-box { background: #f8f9fa; padding: 15px; border-radius: 20px; width: 80px; }
+        .stat-box span { display: block; font-size: 14px; font-weight: bold; }
+        .stat-box label { font-size: 10px; color: var(--text-gray); }
+        
+        .btn-main {
+            background: var(--primary); color: white; border: none;
+            padding: 20px; width: 100%; border-radius: 22px;
+            font-size: 16px; font-weight: bold; box-shadow: 0 10px 20px rgba(67, 97, 238, 0.2);
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
 
-    <!-- سەرەکی -->
-    <div id="main-menu" class="section active">
-        <div class="header"><h1>خزمەتگوزاری کوردستان</h1><p>خزمەتگوزاریی مەبەست هەڵبژێرە</p></div>
-        <div class="grid">
-            <div class="card" onclick="showSection('doctor-types')"><i>🩺</i><h2>پزیشکەکان</h2></div>
-            <div class="card" onclick="showSection('worker-types')"><i>🛠️</i><h2>پیشەوەران</h2></div>
-            <div class="card" onclick="showSection('shop-types')"><i>🛒</i><h2>بازاڕ و دوکان</h2></div>
-            <div class="card" onclick="showSection('register-form')"><i>✍️</i><h2>تۆمارکردنی کار</h2></div>
+    <!-- Header -->
+    <div class="welcome-section">
+        <div class="user-greet">
+            <p id="date-now">ڕۆژت باش ✨</p>
+            <h1>خزمەتگوزاری کوردستان</h1>
+        </div>
+        <div class="profile-img-top"></div>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="search-container">
+        <div class="search-box">🔍 گەڕان بۆ دکتۆر، وەستا...</div>
+    </div>
+
+    <div class="container">
+        <!-- Main Screen -->
+        <div id="scr-home" class="section active">
+            <h3 style="font-size: 16px;">بەشەکان</h3>
+            <div class="category-grid">
+                <div class="cat-card" onclick="show('scr-docs')"><i>🩺</i><h2>پزیشکەکان</h2></div>
+                <div class="cat-card" onclick="show('scr-workers')"><i>🛠️</i><h2>پیشەوەران</h2></div>
+                <div class="cat-card" onclick="show('scr-shops')"><i>🛒</i><h2>بازاڕ</h2></div>
+                <div class="cat-card" onclick="show('scr-reg')"><i>📝</i><h2>تۆمارکردن</h2></div>
+            </div>
+        </div>
+
+        <!-- Doctor List Screen -->
+        <div id="scr-docs" class="section">
+            <button class="back-btn" onclick="show('scr-home')">↩ گەڕانەوە</button>
+            <h3 style="font-size: 18px;">پزیشکانی ددان</h3>
+            
+            <div class="doctor-item" onclick="show('scr-detail')">
+                <div class="doc-avatar">👤</div>
+                <div class="doc-info">
+                    <h3>د. ئاراس ئەحمەد</h3>
+                    <p>پزیشکی ددان و جوانکاری</p>
+                    <span class="rating">⭐ 4.9 (١٢٠ بینین)</span>
+                </div>
+            </div>
+            
+            <div class="doctor-item">
+                <div class="doc-avatar">👤</div>
+                <div class="doc-info">
+                    <h3>د. کچێ ئەحمەد</h3>
+                    <p>پزیشکی چاو</p>
+                    <span class="rating">⭐ 4.8 (٨٥ بینین)</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detail Screen (ڕێک وەک وێنەکان) -->
+        <div id="scr-detail" class="section">
+            <button class="back-btn" onclick="show('scr-docs')">↩ گەڕانەوە</button>
+            <div class="detail-card">
+                <div class="detail-img">👤</div>
+                <h2>د. ئاراس ئەحمەد</h2>
+                <p style="color: var(--text-gray);">پزیشکی ددان</p>
+                
+                <div class="stats-row">
+                    <div class="stat-box"><span>12+</span><label>ئەزموون</label></div>
+                    <div class="stat-box"><span>2k+</span><label>نەخۆش</label></div>
+                    <div class="stat-box"><span>4.9</span><label>ڕەیتینگ</label></div>
+                </div>
+
+                <div style="text-align: right; padding: 10px;">
+                    <h4>دەربارە</h4>
+                    <p style="font-size: 13px; color: var(--text-gray);">پسپۆڕ لە چاندنی ددان و جوانکاری بە نوێترین تەکنەلۆژیا لە شاری هەڵەبجە.</p>
+                </div>
+
+                <button class="btn-main" onclick="window.open('tel:07500000000')">پەیوەندی بکە</button>
+            </div>
+        </div>
+
+        <!-- Registration Screen -->
+        <div id="scr-reg" class="section">
+            <button class="back-btn" onclick="show('scr-home')">↩ گەڕانەوە</button>
+            <h2 style="margin-bottom: 20px;">تۆمارکردنی نوێ</h2>
+            <input type="text" id="r-name" placeholder="ناوی تەواو">
+            <input type="text" id="r-job" placeholder="پیشە">
+            <input type="number" id="r-exp" placeholder="ساڵانی ئەزموون">
+            <textarea id="r-addr" placeholder="ناونیشان" rows="3"></textarea>
+            <input type="tel" id="r-tel" placeholder="ژمارەی مۆبایل">
+            <button class="btn-main" onclick="sendData()">تۆمارکردن</button>
         </div>
     </div>
 
-    <!-- پزیشک -->
-    <div id="doctor-types" class="section">
-        <button class="btn-back" onclick="showSection('main-menu')">↩ گەڕانەوە</button>
-        <div class="header"><h2>پسپۆڕییە پزیشکییەکان</h2></div>
-        <div class="grid">
-            <div class="card" onclick="showSection('city-select', 'dentist')"><i>🦷</i><h2>پزیشکی ددان</h2></div>
-            <div class="card" onclick="showSection('city-select', 'eye')"><i>👁️</i><h2>پزیشکی چاو</h2></div>
-        </div>
-    </div>
-
-    <!-- پیشەوەر -->
-    <div id="worker-types" class="section">
-        <button class="btn-back" onclick="showSection('main-menu')">↩ گەڕانەوە</button>
-        <div class="header"><h2>خزمەتگوزاری پیشەوەران</h2></div>
-        <div class="grid">
-            <div class="card" onclick="showSection('city-select', 'plumber')"><i>🚰</i><h2>وەستای بۆری</h2></div>
-            <div class="card" onclick="showSection('city-select', 'electrician')"><i>⚡</i><h2>کارەباچی</h2></div>
-        </div>
-    </div>
-
-    <!-- بازاڕ -->
-    <div id="shop-types" class="section">
-        <button class="btn-back" onclick="showSection('main-menu')">↩ گەڕانەوە</button>
-        <div class="header"><h2>بازاڕ و دوکانەکان</h2></div>
-        <div class="grid">
-            <div class="card" onclick="showSection('city-select', 'market')"><i>🍏</i><h2>سەوزەفرۆش</h2></div>
-            <div class="card" onclick="showSection('city-select', 'clothing')"><i>👕</i><h2>جلوبەرگ</h2></div>
-        </div>
-    </div>
-
-    <!-- شار -->
-    <div id="city-select" class="section">
-        <button class="btn-back" onclick="goBackFromCity()">↩ گەڕانەوە</button>
-        <div class="header"><h2>شارەکەت هەڵبژێرە</h2></div>
-        <div class="grid">
-            <div class="card" onclick="showSection('results')"><i>📍</i><h2>هەولێر</h2></div>
-            <div class="card" onclick="showSection('results')"><i>📍</i><h2>سلێمانی</h2></div>
-            <div class="card" onclick="showSection('results')"><i>📍</i><h2>هەڵەبجە</h2></div>
-        </div>
-    </div>
-
-    <!-- ئەنجام -->
-    <div id="results" class="section">
-        <button class="btn-back" onclick="showSection('city-select')">↩ گەڕانەوە</button>
-        <div class="no-data">
-            <i>🔍</i>
-            <p>لەم قۆناغەدا هیچ داتایەک نییە. زانیارییە نوێیەکان بەم زووانە لێرە دەردەکەون.</p>
-        </div>
-    </div>
-
-    <!-- تۆمارکردن -->
-    <div id="register-form" class="section">
-        <button class="btn-back" onclick="showSection('main-menu')">↩ گەڕانەوە</button>
-        <div class="header"><h2>تۆمارکردنی پیشە</h2></div>
-        <input type="text" id="name" placeholder="ناوی تەواو">
-        <input type="tel" id="phone" placeholder="ژمارەی مۆبایل">
-        <input type="number" id="exp" placeholder="ساڵانی ئەزموون">
-        <textarea id="addr" placeholder="ناونیشانی ورد و شوێنەکانی کار"></textarea>
-        <button class="btn-submit" onclick="sendData()">تۆمارکردن و ناردن</button>
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <div class="nav-item active-nav">🏠</div>
+        <div class="nav-item">🔍</div>
+        <div class="nav-item">📅</div>
+        <div class="nav-item">👤</div>
     </div>
 
     <script>
         let tg = window.Telegram.WebApp;
-        let lastCat = '';
         tg.expand();
+        tg.headerColor = '#fdfdfe';
 
-        function showSection(id, cat = '') {
-            if(cat) lastCat = cat;
+        function show(id) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
-        }
-
-        function goBackFromCity() {
-            if(['dentist', 'eye'].includes(lastCat)) showSection('doctor-types');
-            else if(['plumber', 'electrician'].includes(lastCat)) showSection('worker-types');
-            else showSection('shop-types');
+            window.scrollTo(0,0);
         }
 
         function sendData() {
-            const data = {
-                name: document.getElementById('name').value,
-                phone: document.getElementById('phone').value,
-                addr: document.getElementById('addr').value,
-                exp: document.getElementById('exp').value
+            let obj = {
+                name: document.getElementById('r-name').value,
+                phone: document.getElementById('r-tel').value,
+                job: document.getElementById('r-job').value
             };
-            if(!data.name || !data.phone) return alert("تکایە ناو و مۆبایل پڕ بکەرەوە");
-            tg.sendData(JSON.stringify(data)); // ئەمە ئێستا کار دەکات
+            if(!obj.name || !obj.phone) return alert("پڕی بکەرەوە");
+            tg.sendData(JSON.stringify(obj));
         }
+
+        // دانانی کات
+        const d = new Date();
+        const hours = d.getHours();
+        let greet = "ڕۆژت باش ✨";
+        if(hours >= 12 && hours < 18) greet = "نیوەڕۆت باش ☀️";
+        if(hours >= 18) greet = "ئێوارەت باش 🌙";
+        document.getElementById('date-now').innerText = greet;
     </script>
 </body>
 </html>
