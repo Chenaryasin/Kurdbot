@@ -18,10 +18,8 @@
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .card { background: var(--white); border-radius: 28px; padding: 25px 15px; text-align: center; box-shadow: 0 8px 20px rgba(0,0,0,0.03); cursor: pointer; border: 1px solid rgba(0,0,0,0.01); }
         .card i { font-size: 40px; display: block; margin-bottom: 12px; }
-        /* Professional Card */
-        .pro-card { background: white; border-radius: 25px; padding: 20px; margin-bottom: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); position: relative; }
+        .pro-card { background: white; border-radius: 25px; padding: 20px; margin-bottom: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); text-align: right; }
         .pro-name { font-weight: 700; font-size: 18px; color: var(--primary); margin: 0; }
-        .pro-job { font-size: 13px; color: var(--gray); margin: 5px 0; }
         .btn-call { background: #27ae60; color: white; border: none; padding: 10px; width: 100%; border-radius: 15px; font-weight: bold; margin-top: 10px; cursor: pointer; }
         input, select, textarea { width: 100%; padding: 15px; margin-bottom: 15px; border: 2px solid #edf2f4; border-radius: 18px; font-family: inherit; box-sizing: border-box; }
         .btn-main { background: var(--primary); color: white; border: none; padding: 18px; width: 100%; border-radius: 20px; font-size: 16px; font-weight: 700; cursor: pointer; }
@@ -36,45 +34,31 @@
                 <div class="card" onclick="show('scr-docs')"><i>🩺</i><h2>پزیشکەکان</h2></div>
                 <div class="card" onclick="show('scr-workers')"><i>🛠️</i><h2>پیشەوەران</h2></div>
                 <div class="card" onclick="show('scr-shops')"><i>🛒</i><h2>بازاڕ</h2></div>
-                <div class="card" onclick="show('scr-reg')"><i>✨</i><h2>تۆمارکردنی کار</h2></div>
+                <div class="card" onclick="show('scr-reg')"><i>✨</i><h2>تۆمارکردن</h2></div>
             </div>
         </div>
     </div>
 
-    <!-- پزیشکەکان -->
-    <div id="scr-docs" class="section"><div class="container"><span class="back-btn" onclick="show('scr-home')">↩ گەڕانەوە</span><div class="grid">
-        <div class="card" onclick="loadResults('doctor')"><i>🦷</i><h2>پزیشکی ددان</h2></div>
-        <div class="card" onclick="loadResults('doctor')"><i>👁️</i><h2>پزیشکی چاو</h2></div>
-    </div></div></div>
+    <div id="scr-docs" class="section"><div class="container"><span class="back-btn" onclick="show('scr-home')">↩ گەڕانەوە</span>
+        <div class="grid"><div class="card" onclick="loadResults('doctor')"><i>🦷</i><h2>پزیشکی ددان</h2></div><div class="card" onclick="loadResults('doctor')"><i>👁️</i><h2>پزیشکی چاو</h2></div></div>
+    </div></div>
 
-    <!-- پیشەوەران -->
-    <div id="scr-workers" class="section"><div class="container"><span class="back-btn" onclick="show('scr-home')">↩ گەڕانەوە</span><div class="grid">
-        <div class="card" onclick="loadResults('worker')"><i>🚰</i><h2>وەستای بۆری</h2></div>
-        <div class="card" onclick="loadResults('worker')"><i>⚡</i><h2>کارەباچی</h2></div>
-    </div></div></div>
+    <div id="scr-workers" class="section"><div class="container"><span class="back-btn" onclick="show('scr-home')">↩ گەڕانەوە</span>
+        <div class="grid"><div class="card" onclick="loadResults('worker')"><i>🚰</i><h2>وەستای بۆری</h2></div><div class="card" onclick="loadResults('worker')"><i>⚡</i><h2>کارەباچی</h2></div></div>
+    </div></div>
 
-    <!-- ئەنجامەکان (ئەمە داینامیکی دەبێت) -->
-    <div id="scr-results" class="section">
-        <div class="container">
-            <span class="back-btn" onclick="show('scr-home')">↩ گەڕانەوە بۆ سەرەکی</span>
-            <div id="data-container">چاوەڕێ بکە...</div>
-        </div>
-    </div>
+    <div id="scr-results" class="section"><div class="container"><span class="back-btn" onclick="show('scr-home')">↩ گەڕانەوە</span><div id="data-container"></div></div></div>
 
-    <!-- فۆرم -->
     <div id="scr-reg" class="section"><div class="container"><span class="back-btn" onclick="show('scr-home')">↩ گەڕانەوە</span>
-        <input type="text" id="r-name" placeholder="ناوی تەواو">
-        <select id="r-cat"><option value="doctor">پزیشک</option><option value="worker">پیشەوەر</option></select>
-        <input type="text" id="r-job" placeholder="پیشەی ورد (بۆ نموونە: ددان)">
-        <input type="number" id="r-exp" placeholder="ساڵانی ئەزموون">
-        <textarea id="r-addr" placeholder="ناونیشان"></textarea>
-        <input type="tel" id="r-tel" placeholder="مۆبایل">
-        <button class="btn-main" onclick="submitData()">تۆمارکردن</button>
+        <input type="text" id="r-name" placeholder="ناوی تەواو"><select id="r-cat"><option value="doctor">پزیشک</option><option value="worker">پیشەوەر</option></select>
+        <input type="text" id="r-job" placeholder="پیشەی ورد"><input type="number" id="r-exp" placeholder="ئەزموون"><textarea id="r-addr" placeholder="ناونیشان"></textarea>
+        <input type="tel" id="r-tel" placeholder="مۆبایل"><button class="btn-main" onclick="submitData()">تۆمارکردن</button>
     </div></div>
 
     <script>
         let tg = window.Telegram.WebApp;
-        const API_URL = "https://6a4c977ed6a634.lhr.life"; // لینکە نوێیەکەی تۆ
+        // لێرە تەنها لینکەکەت پەیست بکە بێ ئەوەی دەستکاری هیچ تەنیشتێکی بکەیت
+        const API_URL = "https://6a4c977ed6a634.lhr.life"; 
 
         function show(id) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
@@ -85,31 +69,21 @@
             show('scr-results');
             const container = document.getElementById('data-container');
             container.innerHTML = "خەریکی بارکردنی زانیارییەکانین...";
-            
             try {
-                const res = await fetch(`${API_URL}/api/professionals`);
+                const res = await fetch(API_URL + "/api/professionals");
                 const allData = await res.json();
-                const filtered = allData.filter(item => item.category === cat || !cat);
-                
-                if(filtered.length === 0) {
-                    container.innerHTML = "ببورە، هیچ کەسێک لەم بەشەدا نییە.";
-                    return;
-                }
-
+                const filtered = allData.filter(item => item.category === cat);
+                if(filtered.length === 0) { container.innerHTML = "ببورە، زانیاری نییە."; return; }
                 container.innerHTML = "";
                 filtered.forEach(pro => {
-                    container.innerHTML += `
-                        <div class="pro-card">
-                            <p class="pro-name">${pro.name}</p>
-                            <p class="pro-job">⭐ ${pro.job} - ${pro.experience} ساڵ ئەزموون</p>
-                            <p style="font-size:12px;">📍 ${pro.address}</p>
-                            <button class="btn-call" onclick="window.open('tel:${pro.phone}')">📞 پەیوەندی: ${pro.phone}</button>
-                        </div>
-                    `;
+                    container.innerHTML += '<div class="pro-card">' +
+                        '<p class="pro-name">' + pro.name + '</p>' +
+                        '<p>⭐ ' + pro.job + ' - ' + pro.experience + ' ساڵ ئەزموون</p>' +
+                        '<p style="font-size:12px;">📍 ' + pro.address + '</p>' +
+                        '<button class="btn-call" onclick="window.open(\'tel:' + pro.phone + '\')">📞 ' + pro.phone + '</button>' +
+                    '</div>';
                 });
-            } catch (e) {
-                container.innerHTML = "کێشەیەک لە پەیوەندی بە سێرڤەرەوە هەیە.";
-            }
+            } catch (e) { container.innerHTML = "کێشەی پەیوەندی هەیە."; }
         }
 
         function submitData() {
